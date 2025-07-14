@@ -5,3 +5,4 @@ dist
 cli.lua
 node_modules
 package-lock.json
+cli.js
