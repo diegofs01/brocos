@@ -96,28 +96,28 @@ end
 
 local function menu_logic(std, game)
     if game.canReadInput then
-        if std.key.press.right == 1 and game.difficulty < 3 then
+        if std.key.axis.right == 1 and game.difficulty < 3 then
             game.difficulty = game.difficulty + 1
             game.canReadInput = false
         end
-        if std.key.press.left == 1 and game.difficulty > 1 then
+        if std.key.axis.left == 1 and game.difficulty > 1 then
             game.difficulty = game.difficulty - 1
             game.canReadInput = false
         end
-        if std.key.press.up == 1 and game.cursor > 0 then
+        if std.key.axis.up == 1 and game.cursor > 0 then
             game.cursor = game.cursor - 1
             game.canReadInput = false
         end
-        if std.key.press.down == 1 and game.cursor < 1 then
+        if std.key.axis.down == 1 and game.cursor < 1 then
             game.cursor = game.cursor + 1
             game.canReadInput = false
         end
-        if std.key.press.red == 1 or std.key.press.enter == 1 then
+        if std.key.axis.a == 1 then
             if game.cursor == 0 then
                 init_board(std, game)
                 game.canReadInput = false
             else
-                std.game.exit()
+                std.app.exit()
             end
         end
     end
@@ -125,21 +125,21 @@ end
 
 local function pause_logic(std, game)
     if game.canReadInput then
-        if std.key.press.up == 1 and game.cursor > 0 then
+        if std.key.axis.up == 1 and game.cursor > 0 then
             game.cursor = game.cursor - 1
             game.canReadInput = false
         end
-        if std.key.press.down == 1 and game.cursor < 2 then
+        if std.key.axis.down == 1 and game.cursor < 2 then
             game.cursor = game.cursor + 1
             game.canReadInput = false
         end
-        if std.key.press.red == 1 then
+        if std.key.axis.a == 1 then
             if game.cursor == 1 then
                 game.destroy = true
                 game.cursor = 0
                 init_board(std, game)
             elseif game.cursor == 2 then
-                std.game.exit()
+                std.app.exit()
             end
             game.pause = false
             game.switchState = true
@@ -150,29 +150,29 @@ end
 
 local function game_logic(std, game)
     if game.canReadInput then
-        if std.key.press.right == 1 and game.playerPos.h < (game.boardHorSize[game.difficulty] - 1) then
+        if std.key.axis.right == 1 and game.playerPos.h < (game.boardHorSize[game.difficulty] - 1) then
             game.playerPos.h = game.playerPos.h + 1
             game.canReadInput = false
         end
-        if std.key.press.left == 1 and game.playerPos.h > 0 then
+        if std.key.axis.left == 1 and game.playerPos.h > 0 then
             game.playerPos.h = game.playerPos.h - 1
             game.canReadInput = false
         end
-        if std.key.press.down == 1 and game.playerPos.v < (game.boardVerSize[game.difficulty] - 1) then
+        if std.key.axis.down == 1 and game.playerPos.v < (game.boardVerSize[game.difficulty] - 1) then
             game.playerPos.v = game.playerPos.v + 1
             game.canReadInput = false
         end
-        if std.key.press.up == 1 and game.playerPos.v > 0 then
+        if std.key.axis.up == 1 and game.playerPos.v > 0 then
             game.playerPos.v = game.playerPos.v - 1
             game.canReadInput = false
         end
-        if std.key.press.enter == 1 then
+        if std.key.axis.d == 1 then
             game.pause = true
             game.cursor = 0
             game.switchState = true
             game.canReadInput = false
         end
-        if std.key.press.red == 1 then
+        if std.key.axis.a == 1 then
             local index = 0
             -- if is empty
             if game.selected.broco == 0 then
@@ -477,9 +477,9 @@ local function draw_logo(std, game)
     end
     draw_border(std, game, h - 5, v - 5, (40*15) + 10, 40 + 10, 5)
     if game.state == 10 then
-        std.draw.text(h + 240 + 40, v+12, 'PAUSE')
+        std.text.print(h + 240 + 40, v+12, 'PAUSE')
     else
-        std.draw.text(h + 240 + 35, v+12, 'BROCOS')
+        std.text.print(h + 240 + 35, v+12, 'BROCOS')
     end
     local newH = (h + 360)
     for i = 6, 1, -1 do
@@ -498,25 +498,25 @@ local function draw_menu(std, game)
 
     --draw options
     draw_border(std, game, h - 10, v - 10, 140, 180, 5)
-    std.draw.text(h + 25, v + 12,      ' Novo Jogo ')
-    std.draw.text(h + 32, v + 40 + 12, '    Sair   ')
-    std.draw.text(h + 25, v + 80 + 12, 'Dificuldade')
+    std.text.print(h + 25, v + 12,      ' Novo Jogo ')
+    std.text.print(h + 32, v + 40 + 12, '    Sair   ')
+    std.text.print(h + 25, v + 80 + 12, 'Dificuldade')
     if game.difficulty == 1 then
-        std.draw.text(h + 45, v + 120 + 12, 'Fácil')
-        std.draw.text(h + 95, v + 120 + 12, '->')
+        std.text.print(h + 45, v + 120 + 12, 'Fácil')
+        std.text.print(h + 95, v + 120 + 12, '->')
     elseif game.difficulty == 2 then
-        std.draw.text(h + 10, v + 120 + 12, '<-')
-        std.draw.text(h + 42, v + 120 + 12, 'Médio')
-        std.draw.text(h + 95, v + 120 + 12, '->')
+        std.text.print(h + 10, v + 120 + 12, '<-')
+        std.text.print(h + 42, v + 120 + 12, 'Médio')
+        std.text.print(h + 95, v + 120 + 12, '->')
     else
-        std.draw.text(h + 10, v + 120 + 12, '<-')
-        std.draw.text(h + 45, v + 120 + 12, 'Difícil')
+        std.text.print(h + 10, v + 120 + 12, '<-')
+        std.text.print(h + 45, v + 120 + 12, 'Difícil')
     end
     local hor = game.boardHorSize[game.difficulty]
     local ver = game.boardVerSize[game.difficulty]
     local mul = game.brocoMultiplier[game.difficulty]
     local comb = '(' .. hor .. 'x' .. ver .. ', ' .. mul .. 'x points' .. ')'
-    std.draw.text(h + 5, v + 120 + 30, comb)
+    std.text.print(h + 5, v + 120 + 30, comb)
     std.draw.rect(1, h + 2, v + (game.cursor * 40) + 10, 116, 20)
 end
 
@@ -529,9 +529,9 @@ local function draw_pause(std, game)
     std.draw.rect(0, h - 10, v - 10, 140, 140)
     -- draw options
     draw_border(std, game, h - 10, v - 10, 140, 140, 5)
-    std.draw.text(h + 30, v + 12,      'Continuar')
-    std.draw.text(h + 32, v + 40 + 12, '   Menu  ')
-    std.draw.text(h + 32, v + 80 + 12, '   Sair  ')
+    std.text.print(h + 30, v + 12,      'Continuar')
+    std.text.print(h + 32, v + 40 + 12, '   Menu  ')
+    std.text.print(h + 32, v + 80 + 12, '   Sair  ')
 
     std.draw.rect(1, h + 2, v + (game.cursor * 40) + 10, 116, 20)
 end
@@ -575,8 +575,8 @@ local function draw(std, game)
         --std.draw.color('white')
         std.draw.rect(0, startH, startV, 120, 80)
         std.draw.color(std.color.black)
-        std.draw.text(startH + 30, startV + 15, 'HI-SCORE')
-        std.draw.text(startH + 30, startV + 40 + 5, string.format("%07d", game.highscore))
+        std.text.print(startH + 30, startV + 15, 'HI-SCORE')
+        std.text.print(startH + 30, startV + 40 + 5, string.format("%07d", game.highscore))
         draw_border(std, game, startH - 5, startV - 5, 120 + 10, 80 + 10, 5)
 
         -- draw broco count
@@ -594,28 +594,28 @@ local function draw(std, game)
         --std.draw.color('white')
         std.draw.rect(0, startH, startV, 120, maxV)
         std.draw.color(std.color.black)
-        std.draw.text(startH + 16, startV + 15, 'BROCO COUNT')
+        std.text.print(startH + 16, startV + 15, 'BROCO COUNT')
         draw_border(std, game, startH - 5, startV - 5, 120 + 10, maxV + 10, 5)
         render_broco(std, game, startH, startV + 40, 1) --square
         std.draw.color(std.color.black)
-        std.draw.text(startH + 40 + 16, startV + 40 + 12, string.format("%05d", game.count.squares))
+        std.text.print(startH + 40 + 16, startV + 40 + 12, string.format("%05d", game.count.squares))
         render_broco(std, game, startH, startV + 80, 2) --diamond
         std.draw.color(std.color.black)
-        std.draw.text(startH + 40 + 16, startV + 80 + 12, string.format("%05d", game.count.diamonds))
+        std.text.print(startH + 40 + 16, startV + 80 + 12, string.format("%05d", game.count.diamonds))
         render_broco(std, game, startH, startV + 120, 3) --triangle
         std.draw.color(std.color.black)
-        std.draw.text(startH + 40 + 16, startV + 120 + 12, string.format("%05d", game.count.triangles))
+        std.text.print(startH + 40 + 16, startV + 120 + 12, string.format("%05d", game.count.triangles))
         render_broco(std, game, startH, startV + 160, 4) --plus
         std.draw.color(std.color.black)
-        std.draw.text(startH + 40 + 16, startV + 160 + 12, string.format("%05d", game.count.plus))
+        std.text.print(startH + 40 + 16, startV + 160 + 12, string.format("%05d", game.count.plus))
         if game.difficulty > 1 then
             render_broco(std, game, startH, startV + 200, 5) --square
             std.draw.color(std.color.black)
-            std.draw.text(startH + 40 + 16, startV + 200 + 12, string.format("%05d", game.count.trapezoid))
+            std.text.print(startH + 40 + 16, startV + 200 + 12, string.format("%05d", game.count.trapezoid))
             if game.difficulty == 3 then
                 render_broco(std, game, startH, startV + 240, 6) --square
                 std.draw.color(std.color.black)
-                std.draw.text(startH + 40 + 16, startV + 240 + 12, string.format("%05d", game.count.star))
+                std.text.print(startH + 40 + 16, startV + 240 + 12, string.format("%05d", game.count.star))
             end
         end
 
@@ -662,8 +662,8 @@ local function draw(std, game)
         --std.draw.color('white')
         std.draw.rect(0, startH , startV, 120, 80)
         std.draw.color(std.color.black)
-        std.draw.text(startH + 38, startV + 15, 'SCORE')
-        std.draw.text(startH + 30, startV + 40 + 5, string.format("%07d", game.score))
+        std.text.print(startH + 38, startV + 15, 'SCORE')
+        std.text.print(startH + 30, startV + 40 + 5, string.format("%07d", game.score))
         draw_border(std, game, startH, startV, 120, 80, 5)
 
         -- draw selected broco
@@ -673,7 +673,7 @@ local function draw(std, game)
         --std.draw.color('white')
         std.draw.rect(0, startH, startV, 120, 160)
         std.draw.color(std.color.black)
-        std.draw.text(startH + 28, startV + 15, 'SELECTED')
+        std.text.print(startH + 28, startV + 15, 'SELECTED')
         draw_border(std, game, startH, startV, 120, 160, 5)
         if game.selected.broco > 0 then
             render_broco(std, game, startH+40, startV + 80, game.selected.broco)
@@ -690,8 +690,8 @@ local function draw(std, game)
             std.draw.color(colorTable.backgroundBoard)
             std.draw.rect(0, startH, startV, 120, 80)
             std.draw.color(std.color.black)
-            std.draw.text(startH + 30, startV + 15, 'MATCHES')
-            std.draw.text(startH + 48, startV + 40 + 5, string.format("%03d", game.matchesCount))
+            std.text.print(startH + 30, startV + 15, 'MATCHES')
+            std.text.print(startH + 48, startV + 40 + 5, string.format("%03d", game.matchesCount))
             draw_border(std, game, startH, startV, 120, 80, 5)
         end
     end
@@ -709,7 +709,7 @@ local P = {
         version='1.0.0'
     },
     config={
-        require = 'math random'
+        require = 'math math.random'
     },
     callbacks={
         init=init,
